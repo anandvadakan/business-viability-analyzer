@@ -1,0 +1,9 @@
+{
+  "monthly_revenue": 500000,
+  "monthly_cogs": 300000,
+  "monthly_opex": 150000,
+  "cash_on_hand": 1000000,
+  "customer_count": 200,
+  "cac": 500,
+  "avg_customer_lifetime_months": 12
+}
