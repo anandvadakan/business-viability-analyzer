@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Business Viability Analyzer</title>
+<style>
+  body { font-family: -apple-system, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; background: #0f1115; color: #e4e6eb; }
+  h1 { font-size: 22px; }
+  label { display: block; margin-top: 12px; font-size: 13px; color: #9aa0a6; }
+  input { width: 100%; padding: 8px; margin-top: 4px; background: #1c1f26; border: 1px solid #333; color: #fff; border-radius: 6px; box-sizing: border-box; }
+  button { margin-top: 20px; padding: 10px 20px; background: #4f8cff; border: none; color: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  #result { margin-top: 30px; white-space: pre-wrap; background: #1c1f26; padding: 16px; border-radius: 8px; font-size: 14px; line-height: 1.5; }
+  .kpi { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #2a2d35; }
+</style>
+</head>
+<body>
+<h1>Business Viability Analyzer</h1>
+
+<label>Monthly Revenue (₹)</label>
+<input id="revenue" type="number" value="500000">
+
+<label>Monthly COGS (₹)</label>
+<input id="cogs" type="number" value="300000">
+
+<label>Monthly OPEX (₹)</label>
+<input id="opex" type="number" value="150000">
+
+<label>Cash on Hand (₹)</label>
+<input id="cash" type="number" value="1000000">
+
+<label>Customer Count</label>
+<input id="customers" type="number" value="200">
+
+<label>CAC — Customer Acquisition Cost (₹)</label>
+<input id="cac" type="number" value="500">
+
+<label>Avg Customer Lifetime (months)</label>
+<input id="lifetime" type="number" value="12">
+
+<button onclick="runAnalysis()">Analyze</button>
+
+<div id="result"></div>
+
+<script>
+async function runAnalysis() {
+  const payload = {
+    monthly_revenue: +document.getElementById('revenue').value,
+    monthly_cogs: +document.getElementById('cogs').value,
+    monthly_opex: +document.getElementById('opex').value,
+    cash_on_hand: +document.getElementById('cash').value,
+    customer_count: +document.getElementById('customers').value,
+    cac: +document.getElementById('cac').value,
+    avg_customer_lifetime_months: +document.getElementById('lifetime').value,
+  };
+
+  document.getElementById('result').innerText = "Analyzing...";
+
+  const res = await fetch('http://localhost:8000/analyze', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+
+  let out = "KPIs:\n";
+  for (const [k, v] of Object.entries(data.kpis)) {
+    out += `  ${k}: ${v}\n`;
+  }
+  out += "\nMarket Snapshot:\n";
+  for (const [k, v] of Object.entries(data.market)) {
+    out += `  ${k}: ${JSON.stringify(v)}\n`;
+  }
+  out += "\n--- AI DIAGNOSIS ---\n" + data.diagnosis;
+
+  document.getElementById('result').innerText = out;
+}
+</script>
+</body>
+</html>
