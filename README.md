@@ -9,7 +9,7 @@ diagnosis of where money is leaking and what to change — using Claude.
 1. `cd backend`
 2. `python -m venv venv && source venv/bin/activate` (or `venv\Scripts\activate` on Windows)
 3. `pip install -r ../requirements.txt`
-4. Copy `.env.example` to `.env` and add your Anthropic API key
+4. Copy `.env.example` to `.env` and add your Groq API key
 5. `uvicorn main:app --reload --port 8000`
 6. Open `frontend/index.html` in your browser (just double-click it)
 7. Fill in the numbers, click Analyze
